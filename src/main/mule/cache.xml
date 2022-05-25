@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<ee:object-store-caching-strategy name="Caching_Strategy1" doc:name="Caching Strategy" doc:id="0217bdde-21c3-4700-8c18-3bd7d710dd8b" keyGenerationExpression="#[vars.username]" />
+	<http:listener-config name="HTTP_Listener_config2" doc:name="HTTP Listener config" doc:id="14635704-4d89-4f01-8002-d735de1f65df" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<ee:object-store-caching-strategy name="Caching_Strategy" doc:name="Caching Strategy" doc:id="d67a2494-ba3b-4df4-83b3-4af02624900d" keyGenerationExpression="#[vars.username]" />
+	<ee:object-store-caching-strategy name="Caching_Strategy2" doc:name="Caching Strategy" doc:id="d12ca3e1-8254-49de-b02d-473d60e0723c" keyGenerationExpression="#[vars.username]" />
+	<flow name="cacheFlow" doc:id="d2b8ac50-2a82-4f50-bb98-daecefe4acce" >
+		<http:listener doc:name="Listener" doc:id="aa9d446c-72d9-4fdf-859a-a82408385798" path="/cache" config-ref="HTTP_Listener_config2"/>
+		<logger level="INFO" doc:name="Logger" doc:id="23d1b835-3597-4cb5-bc44-c41bcb9e6a6f" message="====started cache===="/>
+		<set-variable value='#[attributes.queryParams.username]' doc:name="Set Variable" doc:id="2304b583-2f6b-4f87-a3a1-2c4c5f0054eb" variableName="username"/>
+		<ee:cache doc:name="Cache" doc:id="fa40271f-79bb-4f8b-b70b-9f418ec18c05" cachingStrategy-ref="Caching_Strategy2">
+			<logger level="INFO" doc:name="Logger" doc:id="0814e43c-4d43-40ff-a6ae-019377851a5d" message="============voteridicard====#[vars.username]" />
+			<logger level="INFO" doc:name="Logger" doc:id="0f15e26d-ed75-420f-a101-b702117b6c40" message="#[vars.username]" />
+		</ee:cache>
+		<logger level="INFO" doc:name="Logger" doc:id="e7b9a471-08b9-44e1-85b9-2e3fdbcc875b" message="#[vars.username]"/>
+	</flow>
+</mule>
